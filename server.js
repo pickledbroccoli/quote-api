@@ -38,7 +38,23 @@ app.get('/api/quotes', (req, res, next) => {
     }
 });
 
+app.post('/api/quotes', (req, res, next) => {
+    if (req.query.person && req.query.quote) {
+        
+        const newQuoteToAdd = {
+            quote: req.query.quote,
+            person: req.query.person
+        };
+        
+        quotes.push(newQuoteToAdd);
+        res.send({
+            quote: newQuoteToAdd
+        });
 
+    } else {
+        res.status(400).send('Missing person or quote parameter');
+    }
+});
 
 
 app.listen(PORT, () => {
