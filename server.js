@@ -16,7 +16,27 @@ app.get('/api/quotes/random', (req, res, next) => {
 
 });
 
-app.get('/api/quotes', (req, res, next) => {});
+app.get('/api/quotes', (req, res, next) => {
+    if (req.query.person) {
+
+        // GET quotes by the person in query
+        const dudeToQuote = req.query.person;
+        if (dudeToQuote) {
+            const quotesByDude = getQuotesByPerson(quotes, dudeToQuote);
+            res.send({
+                quotes: quotesByDude
+            });
+        } else {
+            res.status(404).send('Person Not Found in Quotes List');
+        }
+
+    } else {
+        // GET all quotes
+        res.send({
+            quotes: quotes
+        });
+    }
+});
 
 
 
