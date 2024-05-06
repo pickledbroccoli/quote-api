@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 
 const { quotes } = require('./data');
-const { getRandomElement, getQuotesByPerson, yearAdder, idAdder } = require('./utils');
+const { getRandomElement, getQuotesByPerson, yearAdder, idAdder, getIndexById } = require('./utils');
 
 const PORT = process.env.PORT || 4001;
 
@@ -56,6 +56,55 @@ app.post('/api/quotes', (req, res, next) => {
 
     } else {
         res.status(400).send('Missing person or quote parameter');
+    }
+});
+
+app.get('/api/quotes/:id', (req, res, next) => {
+    const thisQuote = getIndexById(req.params.id, quotes);
+    
+    if (thisQuote !== -1) {
+        res.send({
+            quote: quotes[thisQuote]
+        });
+    } else {
+        res.status(404).send(`id ${req.params.id} not found`);
+    }
+});
+
+// to update quote by ID, if it exist
+// route with query string - if any of PERSON, YEAR, QUOTE in query, update those
+app.put('/api/quotes/:id', (req, res, next) => {
+    const thisToUpdate = getIndexById(req.params.id, quotes);
+    if (thisToUpdate !== -1) {
+        
+        const newPerson = req.query.person || quotes[thisToUpdate].person;
+        const newQuote = req.query.quote || quotes[thisToUpdate].quote;
+        const newYear = req.query.year || quotes[thisToUpdate].year;
+
+        quotes[thisToUpdate].person = newPerson;
+        quotes[thisToUpdate].quote = newQuote;
+        quotes[thisToUpdate].year = newYear;
+               
+        res.send({
+            quote: quotes[thisToUpdate]
+        });
+
+    } else {
+        res.status(404).send('id not found');
+    }
+});
+
+// to DELETE quote by ID
+app.delete('/api/quotes/:id', (req, res, next) => {
+    const thisQuote = getIndexById(req.params.id, quotes);
+    
+    if (thisQuote !== -1) {
+        
+        quotes.splice(thisQuote, 1);
+
+        res.status(204).send();
+    } else {
+        res.status(404).send(`id ${req.params.id} not found`);
     }
 });
 

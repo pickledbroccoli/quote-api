@@ -43,13 +43,11 @@ const blackAdder = () => {
 */
 
 // to get the INDEX for updating or deleting a Quote
-const getIndexById = (id, arr) => {
-  const thisIndex = arr.findIndex( (quote) => {
-    quote.id === id;
-  });
+const getIndexById = (iD, arr) => {
+  const thisIndex = arr.findIndex( item => item.id === Number(iD));
   return thisIndex;
 };
 
 module.exports = {
-  getRandomElement, getQuotesByPerson, idAdder, yearAdder
+  getRandomElement, getQuotesByPerson, idAdder, yearAdder, getIndexById
 };
