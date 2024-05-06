@@ -42,6 +42,14 @@ const blackAdder = () => {
 };
 */
 
+// to get the INDEX for updating or deleting a Quote
+const getIndexById = (id, arr) => {
+  const thisIndex = arr.findIndex( (quote) => {
+    quote.id === id;
+  });
+  return thisIndex;
+};
+
 module.exports = {
   getRandomElement, getQuotesByPerson, idAdder, yearAdder
 };
